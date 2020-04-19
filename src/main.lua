@@ -9,9 +9,12 @@ PADDLE_WIDTH = 14
 PADDLE_HEIGHT = 80
 
 BALL_RADIUS = PADDLE_WIDTH/2
+BALL_SPEED = PADDLE_SPEED
 
 -- Game startup setup
 function love.load()
+    math.randomseed(os.time())
+
     love.window.setTitle("Pong!")
     WINDOW_WIDTH, WINDOW_HEIGHT, FLAGS = love.window.getMode()
 
@@ -19,7 +22,7 @@ function love.load()
     leftPaddle = Paddle(0, paddleInitialY, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, "w", "s")
     rightPaddle = Paddle(WINDOW_WIDTH - PADDLE_WIDTH, paddleInitialY, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, "up", "down")
 
-    ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, BALL_RADIUS)
+    ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, BALL_RADIUS, 0, 0)
 end
 
 -- Drawing area
@@ -40,11 +43,16 @@ end
 function love.update(dt)
     leftPaddle:update(dt)
     rightPaddle:update(dt)
+
+    ball:update(dt)
 end
 
 -- Events
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    elseif key == "space" then
+        ballSpeedX = math.random(1, 2) == 1 and -BALL_SPEED or BALL_SPEED
+        ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, BALL_RADIUS, ballSpeedX, math.random(-BALL_SPEED, BALL_SPEED))
     end
 end
