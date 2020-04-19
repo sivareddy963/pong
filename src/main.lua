@@ -41,6 +41,11 @@ function love.draw()
 end
 
 function love.update(dt)
+    if ball:hasCollided(leftPaddle) or ball:hasCollided(rightPaddle) then
+        ball.speedX = -ball.speedX * 1.15
+        ball.speedY = ball.speedY * math.random(1, 4)/2
+    end
+
     leftPaddle:update(dt)
     rightPaddle:update(dt)
 
