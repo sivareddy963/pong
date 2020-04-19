@@ -30,5 +30,19 @@ function Ball:hasCollided(paddle)
     local isBallsLeftTouching = ballLeftX <= paddleRightX and ballLeftX > paddleLeftX
     local isBallsRightTouching = ballRightX >= paddleLeftX and ballRightX < paddleRightX
 
-    return (isBallInYRange and (isBallsLeftTouching or isBallsRightTouching))
+    return isBallInYRange and (isBallsLeftTouching or isBallsRightTouching)
+end
+
+function Ball:hasHitWall()
+    local ballTop = self.y - self.radius
+    local ballBottom = self.y + self.radius
+
+    local hasHitTop = ballTop <= 0
+    local hasHitBottom = ballBottom >= WINDOW_HEIGHT
+
+    return hasHitTop or hasHitBottom
+end
+
+function Ball:hasGoneOut()
+    return self.x < 0 or self.x > WINDOW_WIDTH
 end

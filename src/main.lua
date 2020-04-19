@@ -22,7 +22,7 @@ function love.load()
     leftPaddle = Paddle(0, paddleInitialY, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, "w", "s")
     rightPaddle = Paddle(WINDOW_WIDTH - PADDLE_WIDTH, paddleInitialY, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, "up", "down")
 
-    ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, BALL_RADIUS, 0, 0)
+    resetBall()
 end
 
 -- Drawing area
@@ -42,8 +42,14 @@ end
 
 function love.update(dt)
     if ball:hasCollided(leftPaddle) or ball:hasCollided(rightPaddle) then
-        ball.speedX = -ball.speedX * 1.15
-        ball.speedY = ball.speedY * math.random(1, 4)/2
+        ball.speedX = -ball.speedX * 1.1
+        ball.speedY = ball.speedY * (math.random(3, 8) / 4)
+    elseif ball:hasGoneOut() then
+        resetBall()
+    end
+
+    if ball:hasHitWall() then
+        ball.speedY = -ball.speedY
     end
 
     leftPaddle:update(dt)
@@ -60,4 +66,8 @@ function love.keypressed(key)
         ballSpeedX = math.random(1, 2) == 1 and -BALL_SPEED or BALL_SPEED
         ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, BALL_RADIUS, ballSpeedX, math.random(-BALL_SPEED, BALL_SPEED))
     end
+end
+
+function resetBall()
+    ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, BALL_RADIUS, 0, 0)
 end
